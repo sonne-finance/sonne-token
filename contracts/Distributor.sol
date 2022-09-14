@@ -1,6 +1,8 @@
-pragma solidity =0.6.6;
+//SPDX-License-Identifier: UNLICENSED
+pragma solidity ^0.8.10;
 
-import "./libraries/SafeMath.sol";
+import "@openzeppelin/contracts/utils/math/SafeMath.sol";
+
 import "./interfaces/ISonne.sol";
 import "./interfaces/IClaimable.sol";
 
@@ -26,14 +28,13 @@ abstract contract Distributor is IClaimable {
         uint256 lastShareIndex,
         uint256 credit
     );
-    event Claim(address indexed account, uint256 amount);
     event EditRecipient(
         address indexed account,
         uint256 shares,
         uint256 totalShares
     );
 
-    constructor(address sonne_, address claimable_) public {
+    constructor(address sonne_, address claimable_) {
         sonne = sonne_;
         claimable = claimable_;
     }

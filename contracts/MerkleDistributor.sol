@@ -1,11 +1,12 @@
 //SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.10;
 
+//import "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
 import "./Distributor.sol";
 
-contract InitializedDistributor is Distributor {
+contract MerkleDistributor is Distributor {
     using SafeMath for uint256;
 
     struct Shareholder {

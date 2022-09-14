@@ -1,4 +1,7 @@
-pragma solidity =0.6.6;
+//SPDX-License-Identifier: UNLICENSED
+pragma solidity ^0.8.10;
+
+import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
 import "./Distributor.sol";
 import "./interfaces/IBorrowTracker.sol";
@@ -10,41 +13,49 @@ import "./libraries/Math.sol";
 // - farmingPool shares edits are effective starting from the next epoch
 
 contract FarmingPool is IBorrowTracker, Distributor {
+    using SafeMath for uint256;
+
     address public immutable borrowable;
 
-    uint public immutable vestingBegin;
-    uint public immutable segmentLength;
+    uint256 public immutable vestingBegin;
+    uint256 public immutable segmentLength;
 
-    uint public epochBegin;
-    uint public epochAmount;
-    uint public lastUpdate;
+    uint256 public epochBegin;
+    uint256 public epochAmount;
+    uint256 public lastUpdate;
 
-    event UpdateShareIndex(uint shareIndex);
-    event Advance(uint epochBegin, uint epochAmount);
+    event Advance(uint256 epochBegin, uint256 epochAmount);
 
     constructor(
-        address tarot_,
+        address sonne_,
         address claimable_,
         address borrowable_,
         address vester_
-    ) public Distributor(tarot_, claimable_) {
+    ) Distributor(sonne_, claimable_) {
         borrowable = borrowable_;
-        uint _vestingBegin = IVester(vester_).vestingBegin();
+        uint256 _vestingBegin = IVester(vester_).vestingBegin();
         vestingBegin = _vestingBegin;
-        segmentLength = IVester(vester_).vestingEnd().sub(_vestingBegin).div(IVester(vester_).segments());
+        segmentLength = IVester(vester_).vestingEnd().sub(_vestingBegin).div(
+            IVester(vester_).segments()
+        );
     }
 
-    function updateShareIndex() public virtual override returns (uint _shareIndex) {
+    function updateShareIndex()
+        public
+        virtual
+        override
+        returns (uint256 _shareIndex)
+    {
         if (totalShares == 0) return shareIndex;
         if (epochBegin == 0) return shareIndex;
-        uint epochEnd = epochBegin + segmentLength;
-        uint blockTimestamp = getBlockTimestamp();
-        uint timestamp = Math.min(blockTimestamp, epochEnd);
-        uint timeElapsed = timestamp - lastUpdate;
+        uint256 epochEnd = epochBegin + segmentLength;
+        uint256 blockTimestamp = getBlockTimestamp();
+        uint256 timestamp = Math.min(blockTimestamp, epochEnd);
+        uint256 timeElapsed = timestamp - lastUpdate;
         assert(timeElapsed <= segmentLength);
         if (timeElapsed == 0) return shareIndex;
 
-        uint amount = epochAmount.mul(timeElapsed).div(segmentLength);
+        uint256 amount = epochAmount.mul(timeElapsed).div(segmentLength);
         _shareIndex = amount.mul(2**160).div(totalShares).add(shareIndex);
         shareIndex = _shareIndex;
         lastUpdate = timestamp;
@@ -52,40 +63,45 @@ contract FarmingPool is IBorrowTracker, Distributor {
     }
 
     function advance() public nonReentrant {
-        uint blockTimestamp = getBlockTimestamp();
+        uint256 blockTimestamp = getBlockTimestamp();
         if (blockTimestamp < vestingBegin) return;
-        uint _epochBegin = epochBegin;
-        if (_epochBegin != 0 && blockTimestamp < _epochBegin + segmentLength) return;
-        uint amount = IClaimable(claimable).claim();
+        uint256 _epochBegin = epochBegin;
+        if (_epochBegin != 0 && blockTimestamp < _epochBegin + segmentLength)
+            return;
+        uint256 amount = IClaimable(claimable).claim();
         if (amount == 0) return;
         updateShareIndex();
-        uint timeSinceBeginning = blockTimestamp - vestingBegin;
+        uint256 timeSinceBeginning = blockTimestamp - vestingBegin;
         epochBegin = blockTimestamp.sub(timeSinceBeginning.mod(segmentLength));
         epochAmount = amount;
         lastUpdate = epochBegin;
         emit Advance(epochBegin, epochAmount);
     }
 
-    function claimInternal(address account) internal override returns (uint amount) {
+    function claimInternal(address account)
+        internal
+        override
+        returns (uint256 amount)
+    {
         advance();
         return super.claimInternal(account);
     }
 
-    function claimAccount(address account) external returns (uint amount) {
+    function claimAccount(address account) external returns (uint256 amount) {
         return claimInternal(account);
     }
 
     function trackBorrow(
         address borrower,
-        uint borrowBalance,
-        uint borrowIndex
+        uint256 borrowBalance,
+        uint256 borrowIndex
     ) external override {
         require(msg.sender == borrowable, "FarmingPool: UNAUTHORIZED");
-        uint newShares = borrowBalance.mul(2**96).div(borrowIndex);
+        uint256 newShares = borrowBalance.mul(2**96).div(borrowIndex);
         editRecipientInternal(borrower, newShares);
     }
 
-    function getBlockTimestamp() public view virtual returns (uint) {
+    function getBlockTimestamp() public view virtual returns (uint256) {
         return block.timestamp;
     }
 }

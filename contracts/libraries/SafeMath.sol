@@ -1,4 +1,5 @@
-pragma solidity =0.6.6;
+//SPDX-License-Identifier: UNLICENSED
+pragma solidity ^0.8.10;
 
 // From https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/math/Math.sol
 // Subject to the MIT license.
@@ -26,10 +27,7 @@ library SafeMath {
      * - Addition cannot overflow.
      */
     function add(uint256 a, uint256 b) internal pure returns (uint256) {
-        uint256 c = a + b;
-        require(c >= a, "SafeMath: addition overflow");
-
-        return c;
+        return a + b;
     }
 
     /**

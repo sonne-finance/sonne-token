@@ -1,9 +1,10 @@
+//SPDX-License-Identifier: UNLICENSED
 pragma solidity >=0.5.0;
 
 interface IBorrowTracker {
     function trackBorrow(
         address borrower,
-        uint borrowBalance,
-        uint borrowIndex
+        uint256 borrowBalance,
+        uint256 borrowIndex
     ) external;
 }

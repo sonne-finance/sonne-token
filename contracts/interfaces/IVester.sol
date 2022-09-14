@@ -1,11 +1,12 @@
+//SPDX-License-Identifier: UNLICENSED
 pragma solidity >=0.5.0;
 
 interface IVester {
-    function segments() external pure returns (uint);
+    function segments() external view returns (uint256);
 
-    function vestingAmount() external pure returns (uint);
+    function vestingAmount() external view returns (uint256);
 
-    function vestingBegin() external pure returns (uint);
+    function vestingBegin() external view returns (uint256);
 
-    function vestingEnd() external pure returns (uint);
+    function vestingEnd() external view returns (uint256);
 }
