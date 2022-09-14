@@ -1,4 +1,5 @@
-pragma solidity =0.6.6;
+//SPDX-License-Identifier: UNLICENSED
+pragma solidity ^0.8.10;
 
 import "./interfaces/IERC20.sol";
 import "./interfaces/IOwnedDistributor.sol";
@@ -64,7 +65,7 @@ contract LiquidityGenerator {
         uint256 periodBegin_,
         uint256 periodDuration_,
         uint256 bonusDuration_
-    ) public {
+    ) {
         require(
             periodDuration_ > 0,
             "LiquidityGenerator: INVALID_PERIOD_DURATION"

@@ -1,20 +1,38 @@
-pragma solidity =0.6.6;
+//SPDX-License-Identifier: UNLICENSED
+pragma solidity ^0.8.10;
+
+import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
 import "./Vester.sol";
 
 contract VesterSale is Vester {
-    constructor(
-        address tarot_,
-        address recipient_,
-        uint vestingAmount_,
-        uint vestingBegin_,
-        uint vestingEnd_
-    ) public Vester(tarot_, recipient_, vestingAmount_, vestingBegin_, vestingEnd_) {}
+    using SafeMath for uint256;
 
-    function getUnlockedAmount() internal virtual override returns (uint amount) {
-        uint blockTimestamp = getBlockTimestamp();
-        uint currentPoint = vestingCurve((blockTimestamp - vestingBegin).mul(1e18).div(vestingEnd - vestingBegin));
-        amount = vestingAmount.mul(currentPoint.sub(previousPoint)).div(finalPoint).mul(8).div(10);
+    constructor(
+        address sonne_,
+        address recipient_,
+        uint256 vestingAmount_,
+        uint256 vestingBegin_,
+        uint256 vestingEnd_
+    ) Vester(sonne_, recipient_, vestingAmount_, vestingBegin_, vestingEnd_) {}
+
+    function getUnlockedAmount()
+        internal
+        virtual
+        override
+        returns (uint256 amount)
+    {
+        uint256 blockTimestamp = getBlockTimestamp();
+        uint256 currentPoint = vestingCurve(
+            (blockTimestamp - vestingBegin).mul(1e18).div(
+                vestingEnd - vestingBegin
+            )
+        );
+        amount = vestingAmount
+            .mul(currentPoint.sub(previousPoint))
+            .div(finalPoint)
+            .mul(8)
+            .div(10);
         if (previousPoint == 0 && currentPoint > 0) {
             // distribute 20% on TGE
             amount = amount.add(vestingAmount.div(5));

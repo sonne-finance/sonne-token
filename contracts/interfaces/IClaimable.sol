@@ -1,7 +1,8 @@
-pragma solidity =0.6.6;
+//SPDX-License-Identifier: UNLICENSED
+pragma solidity ^0.8.10;
 
 interface IClaimable {
-    function claim() external returns (uint amount);
+    function claim() external returns (uint256 amount);
 
-    event Claim(address indexed account, uint amount);
+    event Claim(address indexed account, uint256 amount);
 }

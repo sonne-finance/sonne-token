@@ -1,49 +1,53 @@
-pragma solidity =0.6.6;
+//SPDX-License-Identifier: UNLICENSED
+pragma solidity ^0.8.10;
 
 interface ILiquidityGenerator {
-    function periodBegin() external pure returns (uint);
+    function periodBegin() external pure returns (uint256);
 
-    function periodEnd() external pure returns (uint);
+    function periodEnd() external pure returns (uint256);
 
-    function bonusEnd() external pure returns (uint);
+    function bonusEnd() external pure returns (uint256);
 
     function distributor() external pure returns (address);
 
     function bonusDistributor() external pure returns (address);
 
-    function distributorTotalShares() external view returns (uint);
+    function distributorTotalShares() external view returns (uint256);
 
-    function bonusDistributorTotalShares() external view returns (uint);
+    function bonusDistributorTotalShares() external view returns (uint256);
 
     function distributorRecipients(address)
         external
         view
         returns (
-            uint shares,
-            uint lastShareIndex,
-            uint credit
+            uint256 shares,
+            uint256 lastShareIndex,
+            uint256 credit
         );
 
     function bonusDistributorRecipients(address)
         external
         view
         returns (
-            uint shares,
-            uint lastShareIndex,
-            uint credit
+            uint256 shares,
+            uint256 lastShareIndex,
+            uint256 credit
         );
 
     function deposit() external payable;
 
-    event Finalized(uint amountTarot, uint amountETH);
+    event Finalized(uint256 amountSonne, uint256 amountUSDC);
     event Deposit(
         address indexed sender,
-        uint amount,
-        uint distributorTotalShares,
-        uint bonusDistributorTotalShares,
-        uint newShares,
-        uint newBonusShares
+        uint256 amount,
+        uint256 distributorTotalShares,
+        uint256 bonusDistributorTotalShares,
+        uint256 newShares,
+        uint256 newBonusShares
     );
-    event PostponeUnlockTimestamp(uint prevUnlockTimestamp, uint unlockTimestamp);
-    event Delivered(uint amountPair0, uint amountPair1);
+    event PostponeUnlockTimestamp(
+        uint256 prevUnlockTimestamp,
+        uint256 unlockTimestamp
+    );
+    event Delivered(uint256 amountPair0, uint256 amountPair1);
 }

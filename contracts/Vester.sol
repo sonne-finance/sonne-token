@@ -1,6 +1,8 @@
-pragma solidity =0.6.6;
+//SPDX-License-Identifier: UNLICENSED
+pragma solidity ^0.8.10;
 
-import "./libraries/SafeMath.sol";
+import "@openzeppelin/contracts/utils/math/SafeMath.sol";
+
 import "./interfaces/ISonne.sol";
 import "./interfaces/IClaimable.sol";
 import "./interfaces/IVester.sol";
@@ -26,7 +28,7 @@ contract Vester is IVester, IClaimable {
         uint256 vestingAmount_,
         uint256 vestingBegin_,
         uint256 vestingEnd_
-    ) public {
+    ) {
         require(vestingEnd_ > vestingBegin_, "Vester: END_TOO_EARLY");
 
         sonne = sonne_;

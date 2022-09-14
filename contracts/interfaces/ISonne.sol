@@ -1,4 +1,5 @@
-pragma solidity =0.6.6;
+//SPDX-License-Identifier: UNLICENSED
+pragma solidity ^0.8.10;
 
 //IERC20
 interface ISonne {
