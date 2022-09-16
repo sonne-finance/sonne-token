@@ -5,7 +5,7 @@ import "./interfaces/IBorrowable.sol";
 import "./interfaces/IFarmingPool.sol";
 
 contract ClaimAggregator {
-    constructor() public {}
+    constructor() {}
 
     function trackBorrows(address account, address[] calldata borrowables)
         external
