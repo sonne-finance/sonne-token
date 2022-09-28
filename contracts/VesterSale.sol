@@ -1,9 +1,9 @@
 //SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.10;
 
-import "@openzeppelin/contracts/utils/math/SafeMath.sol";
+import '@openzeppelin/contracts/utils/math/SafeMath.sol';
 
-import "./Vester.sol";
+import './Vester.sol';
 
 contract VesterSale is Vester {
     using SafeMath for uint256;
@@ -31,11 +31,11 @@ contract VesterSale is Vester {
         amount = vestingAmount
             .mul(currentPoint.sub(previousPoint))
             .div(finalPoint)
-            .mul(8)
+            .mul(5)
             .div(10);
         if (previousPoint == 0 && currentPoint > 0) {
-            // distribute 20% on TGE
-            amount = amount.add(vestingAmount.div(5));
+            // distribute 50% on TGE
+            amount = amount.add(vestingAmount.div(2));
         }
         previousPoint = currentPoint;
     }

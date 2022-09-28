@@ -126,3 +126,5 @@ typechain-types
 cache
 artifacts
 
+# secret
+_accounts.ts

@@ -1,10 +1,10 @@
 //SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.10;
 
-import "@openzeppelin/contracts/utils/math/SafeMath.sol";
+import '@openzeppelin/contracts/utils/math/SafeMath.sol';
 
-import "./interfaces/ISonne.sol";
-import "./interfaces/IClaimable.sol";
+import './interfaces/ISonne.sol';
+import './interfaces/IClaimable.sol';
 
 abstract contract Distributor is IClaimable {
     using SafeMath for uint256;
@@ -23,28 +23,15 @@ abstract contract Distributor is IClaimable {
     uint256 public shareIndex;
 
     event UpdateShareIndex(uint256 shareIndex);
-    event UpdateCredit(
-        address indexed account,
-        uint256 lastShareIndex,
-        uint256 credit
-    );
-    event EditRecipient(
-        address indexed account,
-        uint256 shares,
-        uint256 totalShares
-    );
+    event UpdateCredit(address indexed account, uint256 lastShareIndex, uint256 credit);
+    event EditRecipient(address indexed account, uint256 shares, uint256 totalShares);
 
     constructor(address sonne_, address claimable_) {
         sonne = sonne_;
         claimable = claimable_;
     }
 
-    function updateShareIndex()
-        public
-        virtual
-        nonReentrant
-        returns (uint256 _shareIndex)
-    {
+    function updateShareIndex() public virtual nonReentrant returns (uint256 _shareIndex) {
         if (totalShares == 0) return shareIndex;
         uint256 amount = IClaimable(claimable).claim();
         if (amount == 0) return shareIndex;
@@ -57,20 +44,13 @@ abstract contract Distributor is IClaimable {
         uint256 _shareIndex = updateShareIndex();
         if (_shareIndex == 0) return 0;
         Recipient storage recipient = recipients[account];
-        credit =
-            recipient.credit +
-            _shareIndex.sub(recipient.lastShareIndex).mul(recipient.shares) /
-            2**160;
+        credit = recipient.credit + _shareIndex.sub(recipient.lastShareIndex).mul(recipient.shares) / 2**160;
         recipient.lastShareIndex = _shareIndex;
         recipient.credit = credit;
         emit UpdateCredit(account, _shareIndex, credit);
     }
 
-    function claimInternal(address account)
-        internal
-        virtual
-        returns (uint256 amount)
-    {
+    function claimInternal(address account) internal virtual returns (uint256 amount) {
         amount = updateCredit(account);
         if (amount > 0) {
             recipients[account].credit = 0;
@@ -98,7 +78,7 @@ abstract contract Distributor is IClaimable {
     // Prevents a contract from calling itself, directly or indirectly.
     bool internal _notEntered = true;
     modifier nonReentrant() {
-        require(_notEntered, "Distributor: REENTERED");
+        require(_notEntered, 'Distributor: REENTERED');
         _notEntered = false;
         _;
         _notEntered = true;

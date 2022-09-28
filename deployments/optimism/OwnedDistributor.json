@@ -1,0 +1,426 @@
+{
+  "address": "0x9F543b3f1eB37B2540749dF537e83d29309ECc02",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "sonne_",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "claimable_",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "admin_",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "Claim",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "shares",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "totalShares",
+          "type": "uint256"
+        }
+      ],
+      "name": "EditRecipient",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "newAdmin",
+          "type": "address"
+        }
+      ],
+      "name": "SetAdmin",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "lastShareIndex",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "credit",
+          "type": "uint256"
+        }
+      ],
+      "name": "UpdateCredit",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "shareIndex",
+          "type": "uint256"
+        }
+      ],
+      "name": "UpdateShareIndex",
+      "type": "event"
+    },
+    {
+      "inputs": [],
+      "name": "admin",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "claim",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "claimable",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "shares",
+          "type": "uint256"
+        }
+      ],
+      "name": "editRecipient",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "recipients",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "shares",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "lastShareIndex",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "credit",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "admin_",
+          "type": "address"
+        }
+      ],
+      "name": "setAdmin",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "shareIndex",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "sonne",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "totalShares",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "updateCredit",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "credit",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "updateShareIndex",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "_shareIndex",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "transactionHash": "0x7fa35f6ea9e878781880a8a6fbbe30472bfe57e372af4d0cf95ddac4b8248290",
+  "receipt": {
+    "to": null,
+    "from": "0xFb59Ce8986943163F14C590755b29dB2998F2322",
+    "contractAddress": "0x9F543b3f1eB37B2540749dF537e83d29309ECc02",
+    "transactionIndex": 0,
+    "gasUsed": "559109",
+    "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "blockHash": "0x2a74d470a06aeffe39614b7d0d09187761a8d17f9ec37404480ec912b03a8c6f",
+    "transactionHash": "0x7fa35f6ea9e878781880a8a6fbbe30472bfe57e372af4d0cf95ddac4b8248290",
+    "logs": [],
+    "blockNumber": 25818698,
+    "cumulativeGasUsed": "559109",
+    "status": 1,
+    "byzantium": true
+  },
+  "args": [
+    "0x1DB2466d9F5e10D7090E7152B68d62703a2245F0",
+    "0xb4bF17210844418F9F2D3B90036E11aa40517971",
+    "0xFb59Ce8986943163F14C590755b29dB2998F2322"
+  ],
+  "numDeployments": 3,
+  "solcInputHash": "e1e933dd90c2d0d78821c6486450303b",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.10+commit.fc410830\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"sonne_\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"claimable_\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"admin_\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"Claim\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"shares\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"totalShares\",\"type\":\"uint256\"}],\"name\":\"EditRecipient\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"newAdmin\",\"type\":\"address\"}],\"name\":\"SetAdmin\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"lastShareIndex\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"credit\",\"type\":\"uint256\"}],\"name\":\"UpdateCredit\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"shareIndex\",\"type\":\"uint256\"}],\"name\":\"UpdateShareIndex\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"admin\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"claim\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"claimable\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"shares\",\"type\":\"uint256\"}],\"name\":\"editRecipient\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"recipients\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"shares\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"lastShareIndex\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"credit\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"admin_\",\"type\":\"address\"}],\"name\":\"setAdmin\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"shareIndex\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"sonne\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"totalShares\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"updateCredit\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"credit\",\"type\":\"uint256\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"updateShareIndex\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"_shareIndex\",\"type\":\"uint256\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/OwnedDistributor.sol\":\"OwnedDistributor\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"@openzeppelin/contracts/utils/math/SafeMath.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v4.6.0) (utils/math/SafeMath.sol)\\n\\npragma solidity ^0.8.0;\\n\\n// CAUTION\\n// This version of SafeMath should only be used with Solidity 0.8 or later,\\n// because it relies on the compiler's built in overflow checks.\\n\\n/**\\n * @dev Wrappers over Solidity's arithmetic operations.\\n *\\n * NOTE: `SafeMath` is generally not needed starting with Solidity 0.8, since the compiler\\n * now has built in overflow checking.\\n */\\nlibrary SafeMath {\\n    /**\\n     * @dev Returns the addition of two unsigned integers, with an overflow flag.\\n     *\\n     * _Available since v3.4._\\n     */\\n    function tryAdd(uint256 a, uint256 b) internal pure returns (bool, uint256) {\\n        unchecked {\\n            uint256 c = a + b;\\n            if (c < a) return (false, 0);\\n            return (true, c);\\n        }\\n    }\\n\\n    /**\\n     * @dev Returns the subtraction of two unsigned integers, with an overflow flag.\\n     *\\n     * _Available since v3.4._\\n     */\\n    function trySub(uint256 a, uint256 b) internal pure returns (bool, uint256) {\\n        unchecked {\\n            if (b > a) return (false, 0);\\n            return (true, a - b);\\n        }\\n    }\\n\\n    /**\\n     * @dev Returns the multiplication of two unsigned integers, with an overflow flag.\\n     *\\n     * _Available since v3.4._\\n     */\\n    function tryMul(uint256 a, uint256 b) internal pure returns (bool, uint256) {\\n        unchecked {\\n            // Gas optimization: this is cheaper than requiring 'a' not being zero, but the\\n            // benefit is lost if 'b' is also tested.\\n            // See: https://github.com/OpenZeppelin/openzeppelin-contracts/pull/522\\n            if (a == 0) return (true, 0);\\n            uint256 c = a * b;\\n            if (c / a != b) return (false, 0);\\n            return (true, c);\\n        }\\n    }\\n\\n    /**\\n     * @dev Returns the division of two unsigned integers, with a division by zero flag.\\n     *\\n     * _Available since v3.4._\\n     */\\n    function tryDiv(uint256 a, uint256 b) internal pure returns (bool, uint256) {\\n        unchecked {\\n            if (b == 0) return (false, 0);\\n            return (true, a / b);\\n        }\\n    }\\n\\n    /**\\n     * @dev Returns the remainder of dividing two unsigned integers, with a division by zero flag.\\n     *\\n     * _Available since v3.4._\\n     */\\n    function tryMod(uint256 a, uint256 b) internal pure returns (bool, uint256) {\\n        unchecked {\\n            if (b == 0) return (false, 0);\\n            return (true, a % b);\\n        }\\n    }\\n\\n    /**\\n     * @dev Returns the addition of two unsigned integers, reverting on\\n     * overflow.\\n     *\\n     * Counterpart to Solidity's `+` operator.\\n     *\\n     * Requirements:\\n     *\\n     * - Addition cannot overflow.\\n     */\\n    function add(uint256 a, uint256 b) internal pure returns (uint256) {\\n        return a + b;\\n    }\\n\\n    /**\\n     * @dev Returns the subtraction of two unsigned integers, reverting on\\n     * overflow (when the result is negative).\\n     *\\n     * Counterpart to Solidity's `-` operator.\\n     *\\n     * Requirements:\\n     *\\n     * - Subtraction cannot overflow.\\n     */\\n    function sub(uint256 a, uint256 b) internal pure returns (uint256) {\\n        return a - b;\\n    }\\n\\n    /**\\n     * @dev Returns the multiplication of two unsigned integers, reverting on\\n     * overflow.\\n     *\\n     * Counterpart to Solidity's `*` operator.\\n     *\\n     * Requirements:\\n     *\\n     * - Multiplication cannot overflow.\\n     */\\n    function mul(uint256 a, uint256 b) internal pure returns (uint256) {\\n        return a * b;\\n    }\\n\\n    /**\\n     * @dev Returns the integer division of two unsigned integers, reverting on\\n     * division by zero. The result is rounded towards zero.\\n     *\\n     * Counterpart to Solidity's `/` operator.\\n     *\\n     * Requirements:\\n     *\\n     * - The divisor cannot be zero.\\n     */\\n    function div(uint256 a, uint256 b) internal pure returns (uint256) {\\n        return a / b;\\n    }\\n\\n    /**\\n     * @dev Returns the remainder of dividing two unsigned integers. (unsigned integer modulo),\\n     * reverting when dividing by zero.\\n     *\\n     * Counterpart to Solidity's `%` operator. This function uses a `revert`\\n     * opcode (which leaves remaining gas untouched) while Solidity uses an\\n     * invalid opcode to revert (consuming all remaining gas).\\n     *\\n     * Requirements:\\n     *\\n     * - The divisor cannot be zero.\\n     */\\n    function mod(uint256 a, uint256 b) internal pure returns (uint256) {\\n        return a % b;\\n    }\\n\\n    /**\\n     * @dev Returns the subtraction of two unsigned integers, reverting with custom message on\\n     * overflow (when the result is negative).\\n     *\\n     * CAUTION: This function is deprecated because it requires allocating memory for the error\\n     * message unnecessarily. For custom revert reasons use {trySub}.\\n     *\\n     * Counterpart to Solidity's `-` operator.\\n     *\\n     * Requirements:\\n     *\\n     * - Subtraction cannot overflow.\\n     */\\n    function sub(\\n        uint256 a,\\n        uint256 b,\\n        string memory errorMessage\\n    ) internal pure returns (uint256) {\\n        unchecked {\\n            require(b <= a, errorMessage);\\n            return a - b;\\n        }\\n    }\\n\\n    /**\\n     * @dev Returns the integer division of two unsigned integers, reverting with custom message on\\n     * division by zero. The result is rounded towards zero.\\n     *\\n     * Counterpart to Solidity's `/` operator. Note: this function uses a\\n     * `revert` opcode (which leaves remaining gas untouched) while Solidity\\n     * uses an invalid opcode to revert (consuming all remaining gas).\\n     *\\n     * Requirements:\\n     *\\n     * - The divisor cannot be zero.\\n     */\\n    function div(\\n        uint256 a,\\n        uint256 b,\\n        string memory errorMessage\\n    ) internal pure returns (uint256) {\\n        unchecked {\\n            require(b > 0, errorMessage);\\n            return a / b;\\n        }\\n    }\\n\\n    /**\\n     * @dev Returns the remainder of dividing two unsigned integers. (unsigned integer modulo),\\n     * reverting with custom message when dividing by zero.\\n     *\\n     * CAUTION: This function is deprecated because it requires allocating memory for the error\\n     * message unnecessarily. For custom revert reasons use {tryMod}.\\n     *\\n     * Counterpart to Solidity's `%` operator. This function uses a `revert`\\n     * opcode (which leaves remaining gas untouched) while Solidity uses an\\n     * invalid opcode to revert (consuming all remaining gas).\\n     *\\n     * Requirements:\\n     *\\n     * - The divisor cannot be zero.\\n     */\\n    function mod(\\n        uint256 a,\\n        uint256 b,\\n        string memory errorMessage\\n    ) internal pure returns (uint256) {\\n        unchecked {\\n            require(b > 0, errorMessage);\\n            return a % b;\\n        }\\n    }\\n}\\n\",\"keccak256\":\"0x0f633a0223d9a1dcccfcf38a64c9de0874dfcbfac0c6941ccf074d63a2ce0e1e\",\"license\":\"MIT\"},\"contracts/Distributor.sol\":{\"content\":\"//SPDX-License-Identifier: UNLICENSED\\npragma solidity ^0.8.10;\\n\\nimport '@openzeppelin/contracts/utils/math/SafeMath.sol';\\n\\nimport './interfaces/ISonne.sol';\\nimport './interfaces/IClaimable.sol';\\n\\nabstract contract Distributor is IClaimable {\\n    using SafeMath for uint256;\\n\\n    address public immutable sonne;\\n    address public immutable claimable;\\n\\n    struct Recipient {\\n        uint256 shares;\\n        uint256 lastShareIndex;\\n        uint256 credit;\\n    }\\n    mapping(address => Recipient) public recipients;\\n\\n    uint256 public totalShares;\\n    uint256 public shareIndex;\\n\\n    event UpdateShareIndex(uint256 shareIndex);\\n    event UpdateCredit(address indexed account, uint256 lastShareIndex, uint256 credit);\\n    event EditRecipient(address indexed account, uint256 shares, uint256 totalShares);\\n\\n    constructor(address sonne_, address claimable_) {\\n        sonne = sonne_;\\n        claimable = claimable_;\\n    }\\n\\n    function updateShareIndex() public virtual nonReentrant returns (uint256 _shareIndex) {\\n        if (totalShares == 0) return shareIndex;\\n        uint256 amount = IClaimable(claimable).claim();\\n        if (amount == 0) return shareIndex;\\n        _shareIndex = amount.mul(2**160).div(totalShares).add(shareIndex);\\n        shareIndex = _shareIndex;\\n        emit UpdateShareIndex(_shareIndex);\\n    }\\n\\n    function updateCredit(address account) public returns (uint256 credit) {\\n        uint256 _shareIndex = updateShareIndex();\\n        if (_shareIndex == 0) return 0;\\n        Recipient storage recipient = recipients[account];\\n        credit = recipient.credit + _shareIndex.sub(recipient.lastShareIndex).mul(recipient.shares) / 2**160;\\n        recipient.lastShareIndex = _shareIndex;\\n        recipient.credit = credit;\\n        emit UpdateCredit(account, _shareIndex, credit);\\n    }\\n\\n    function claimInternal(address account) internal virtual returns (uint256 amount) {\\n        amount = updateCredit(account);\\n        if (amount > 0) {\\n            recipients[account].credit = 0;\\n            ISonne(sonne).transfer(account, amount);\\n            emit Claim(account, amount);\\n        }\\n    }\\n\\n    function claim() external virtual override returns (uint256 amount) {\\n        return claimInternal(msg.sender);\\n    }\\n\\n    function editRecipientInternal(address account, uint256 shares) internal {\\n        updateCredit(account);\\n        Recipient storage recipient = recipients[account];\\n        uint256 prevShares = recipient.shares;\\n        uint256 _totalShares = shares > prevShares\\n            ? totalShares.add(shares - prevShares)\\n            : totalShares.sub(prevShares - shares);\\n        totalShares = _totalShares;\\n        recipient.shares = shares;\\n        emit EditRecipient(account, shares, _totalShares);\\n    }\\n\\n    // Prevents a contract from calling itself, directly or indirectly.\\n    bool internal _notEntered = true;\\n    modifier nonReentrant() {\\n        require(_notEntered, 'Distributor: REENTERED');\\n        _notEntered = false;\\n        _;\\n        _notEntered = true;\\n    }\\n}\\n\",\"keccak256\":\"0x917bff110b376b835a3edfdfe09e3c092a0e043c1b30133b6918b545beda5e04\",\"license\":\"UNLICENSED\"},\"contracts/OwnedDistributor.sol\":{\"content\":\"//SPDX-License-Identifier: UNLICENSED\\npragma solidity ^0.8.10;\\n\\nimport \\\"./Distributor.sol\\\";\\n\\ncontract OwnedDistributor is Distributor {\\n    address public admin;\\n\\n    event SetAdmin(address newAdmin);\\n\\n    constructor(\\n        address sonne_,\\n        address claimable_,\\n        address admin_\\n    ) Distributor(sonne_, claimable_) {\\n        admin = admin_;\\n    }\\n\\n    function editRecipient(address account, uint256 shares) public virtual {\\n        require(msg.sender == admin, \\\"OwnedDistributor: UNAUTHORIZED\\\");\\n        editRecipientInternal(account, shares);\\n    }\\n\\n    function setAdmin(address admin_) public virtual {\\n        require(msg.sender == admin, \\\"OwnedDistributor: UNAUTHORIZED\\\");\\n        admin = admin_;\\n        emit SetAdmin(admin_);\\n    }\\n}\\n\",\"keccak256\":\"0x771ebceb11c9e8214497d824cd1753a2a74d6063bb619e47f45cafe37c3538d4\",\"license\":\"UNLICENSED\"},\"contracts/interfaces/IClaimable.sol\":{\"content\":\"//SPDX-License-Identifier: UNLICENSED\\npragma solidity ^0.8.10;\\n\\ninterface IClaimable {\\n    function claim() external returns (uint256 amount);\\n\\n    event Claim(address indexed account, uint256 amount);\\n}\\n\",\"keccak256\":\"0xf6f2e486723e732be4d3293aefaeeb7f1c0d4024ced576fe4669900f8459264a\",\"license\":\"UNLICENSED\"},\"contracts/interfaces/ISonne.sol\":{\"content\":\"//SPDX-License-Identifier: UNLICENSED\\npragma solidity ^0.8.10;\\n\\n//IERC20\\ninterface ISonne {\\n    function balanceOf(address account) external view returns (uint256);\\n\\n    function transfer(address dst, uint256 rawAmount) external returns (bool);\\n}\\n\",\"keccak256\":\"0x608266b050015738cd697ea74d44c50b5d78994af8f991c0fcf87f981ec2783d\",\"license\":\"UNLICENSED\"}},\"version\":1}",
+  "bytecode": "0x60c06040526003805460ff1916600117905534801561001d57600080fd5b506040516109b23803806109b283398101604081905261003c9161008d565b6001600160a01b0392831660805290821660a052600380549190921661010002610100600160a81b03199091161790556100d0565b80516001600160a01b038116811461008857600080fd5b919050565b6000806000606084860312156100a257600080fd5b6100ab84610071565b92506100b960208501610071565b91506100c760408501610071565b90509250925092565b60805160a0516108af610103600039600081816101120152610459015260008181610159015261068b01526108af6000f3fe608060405234801561001057600080fd5b50600436106100a95760003560e01c8063af38d75711610071578063af38d7571461010d578063b260187d1461014c578063c0c2ae5014610154578063c56ad1ad1461017b578063eb82031214610184578063f851a440146101ce57600080fd5b80633a98ef39146100ae57806345c08718146100ca5780634674a930146100dd5780634e71d92d146100f2578063704b6c02146100fa575b600080fd5b6100b760015481565b6040519081526020015b60405180910390f35b6100b76100d8366004610773565b6101e6565b6100f06100eb36600461078e565b6102b0565b005b6100b7610322565b6100f0610108366004610773565b610332565b6101347f000000000000000000000000000000000000000000000000000000000000000081565b6040516001600160a01b0390911681526020016100c1565b6100b76103ed565b6101347f000000000000000000000000000000000000000000000000000000000000000081565b6100b760025481565b6101b3610192366004610773565b60006020819052908152604090208054600182015460029092015490919083565b604080519384526020840192909252908201526060016100c1565b6003546101349061010090046001600160a01b031681565b6000806101f16103ed565b9050806102015750600092915050565b6001600160a01b038316600090815260208190526040902080546001820154600160a01b9161023b91610235908690610568565b9061057b565b61024591906107ce565b816002015461025491906107f0565b600182018390556002820181905560408051848152602081018390529194506001600160a01b038616917ff7240857a4f83123f14a7bc3f77cd32d0ae71ede635c92ebdcc14d5ea8ed018a910160405180910390a25050919050565b60035461010090046001600160a01b031633146103145760405162461bcd60e51b815260206004820152601e60248201527f4f776e65644469737472696275746f723a20554e415554484f52495a4544000060448201526064015b60405180910390fd5b61031e8282610587565b5050565b600061032d3361063b565b905090565b60035461010090046001600160a01b031633146103915760405162461bcd60e51b815260206004820152601e60248201527f4f776e65644469737472696275746f723a20554e415554484f52495a45440000604482015260640161030b565b60038054610100600160a81b0319166101006001600160a01b038416908102919091179091556040519081527f5a272403b402d892977df56625f4164ccaf70ca3863991c43ecfe76a6905b0a19060200160405180910390a150565b60035460009060ff1661043b5760405162461bcd60e51b8152602060048201526016602482015275111a5cdd1c9a589d5d1bdc8e8814915153951154915160521b604482015260640161030b565b6003805460ff191690556001546104555750600254610558565b60007f00000000000000000000000000000000000000000000000000000000000000006001600160a01b0316634e71d92d6040518163ffffffff1660e01b81526004016020604051808303816000875af11580156104b7573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906104db9190610808565b9050806104ec575050600254610558565b61051b60025461051560015461050f600160a01b8661057b90919063ffffffff16565b90610744565b90610750565b60028190556040518181529092507f8cae7c5b456d193882de6985578f406aefb641501192211706c5aa0a32612fec9060200160405180910390a1505b6003805460ff1916600117905590565b60006105748284610821565b9392505050565b60006105748284610838565b610590826101e6565b506001600160a01b0382166000908152602081905260408120805490918184116105cf576105ca6105c18584610821565b60015490610568565b6105e5565b6105e56105dc8386610821565b60015490610750565b600181905584845560408051868152602081018390529192506001600160a01b038716917fff3664f5f2f8f85ecd8d30ef2aa6773d8a8448219c7421dcbb67957fb3fafba1910160405180910390a25050505050565b6000610646826101e6565b9050801561073f576001600160a01b03828116600081815260208190526040808220600201919091555163a9059cbb60e01b81526004810191909152602481018390527f00000000000000000000000000000000000000000000000000000000000000009091169063a9059cbb906044016020604051808303816000875af11580156106d6573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906106fa9190610857565b50816001600160a01b03167f47cee97cb7acd717b3c0aa1435d004cd5b3c8c57d70dbceb4e4458bbd60e39d48260405161073691815260200190565b60405180910390a25b919050565b600061057482846107ce565b600061057482846107f0565b80356001600160a01b038116811461073f57600080fd5b60006020828403121561078557600080fd5b6105748261075c565b600080604083850312156107a157600080fd5b6107aa8361075c565b946020939093013593505050565b634e487b7160e01b600052601160045260246000fd5b6000826107eb57634e487b7160e01b600052601260045260246000fd5b500490565b60008219821115610803576108036107b8565b500190565b60006020828403121561081a57600080fd5b5051919050565b600082821015610833576108336107b8565b500390565b6000816000190483118215151615610852576108526107b8565b500290565b60006020828403121561086957600080fd5b8151801515811461057457600080fdfea2646970667358221220576c8c9610cda779f616fc5416f88696aa93354210f01bdd58691658c2e687d164736f6c634300080a0033",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b50600436106100a95760003560e01c8063af38d75711610071578063af38d7571461010d578063b260187d1461014c578063c0c2ae5014610154578063c56ad1ad1461017b578063eb82031214610184578063f851a440146101ce57600080fd5b80633a98ef39146100ae57806345c08718146100ca5780634674a930146100dd5780634e71d92d146100f2578063704b6c02146100fa575b600080fd5b6100b760015481565b6040519081526020015b60405180910390f35b6100b76100d8366004610773565b6101e6565b6100f06100eb36600461078e565b6102b0565b005b6100b7610322565b6100f0610108366004610773565b610332565b6101347f000000000000000000000000000000000000000000000000000000000000000081565b6040516001600160a01b0390911681526020016100c1565b6100b76103ed565b6101347f000000000000000000000000000000000000000000000000000000000000000081565b6100b760025481565b6101b3610192366004610773565b60006020819052908152604090208054600182015460029092015490919083565b604080519384526020840192909252908201526060016100c1565b6003546101349061010090046001600160a01b031681565b6000806101f16103ed565b9050806102015750600092915050565b6001600160a01b038316600090815260208190526040902080546001820154600160a01b9161023b91610235908690610568565b9061057b565b61024591906107ce565b816002015461025491906107f0565b600182018390556002820181905560408051848152602081018390529194506001600160a01b038616917ff7240857a4f83123f14a7bc3f77cd32d0ae71ede635c92ebdcc14d5ea8ed018a910160405180910390a25050919050565b60035461010090046001600160a01b031633146103145760405162461bcd60e51b815260206004820152601e60248201527f4f776e65644469737472696275746f723a20554e415554484f52495a4544000060448201526064015b60405180910390fd5b61031e8282610587565b5050565b600061032d3361063b565b905090565b60035461010090046001600160a01b031633146103915760405162461bcd60e51b815260206004820152601e60248201527f4f776e65644469737472696275746f723a20554e415554484f52495a45440000604482015260640161030b565b60038054610100600160a81b0319166101006001600160a01b038416908102919091179091556040519081527f5a272403b402d892977df56625f4164ccaf70ca3863991c43ecfe76a6905b0a19060200160405180910390a150565b60035460009060ff1661043b5760405162461bcd60e51b8152602060048201526016602482015275111a5cdd1c9a589d5d1bdc8e8814915153951154915160521b604482015260640161030b565b6003805460ff191690556001546104555750600254610558565b60007f00000000000000000000000000000000000000000000000000000000000000006001600160a01b0316634e71d92d6040518163ffffffff1660e01b81526004016020604051808303816000875af11580156104b7573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906104db9190610808565b9050806104ec575050600254610558565b61051b60025461051560015461050f600160a01b8661057b90919063ffffffff16565b90610744565b90610750565b60028190556040518181529092507f8cae7c5b456d193882de6985578f406aefb641501192211706c5aa0a32612fec9060200160405180910390a1505b6003805460ff1916600117905590565b60006105748284610821565b9392505050565b60006105748284610838565b610590826101e6565b506001600160a01b0382166000908152602081905260408120805490918184116105cf576105ca6105c18584610821565b60015490610568565b6105e5565b6105e56105dc8386610821565b60015490610750565b600181905584845560408051868152602081018390529192506001600160a01b038716917fff3664f5f2f8f85ecd8d30ef2aa6773d8a8448219c7421dcbb67957fb3fafba1910160405180910390a25050505050565b6000610646826101e6565b9050801561073f576001600160a01b03828116600081815260208190526040808220600201919091555163a9059cbb60e01b81526004810191909152602481018390527f00000000000000000000000000000000000000000000000000000000000000009091169063a9059cbb906044016020604051808303816000875af11580156106d6573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906106fa9190610857565b50816001600160a01b03167f47cee97cb7acd717b3c0aa1435d004cd5b3c8c57d70dbceb4e4458bbd60e39d48260405161073691815260200190565b60405180910390a25b919050565b600061057482846107ce565b600061057482846107f0565b80356001600160a01b038116811461073f57600080fd5b60006020828403121561078557600080fd5b6105748261075c565b600080604083850312156107a157600080fd5b6107aa8361075c565b946020939093013593505050565b634e487b7160e01b600052601160045260246000fd5b6000826107eb57634e487b7160e01b600052601260045260246000fd5b500490565b60008219821115610803576108036107b8565b500190565b60006020828403121561081a57600080fd5b5051919050565b600082821015610833576108336107b8565b500390565b6000816000190483118215151615610852576108526107b8565b500290565b60006020828403121561086957600080fd5b8151801515811461057457600080fdfea2646970667358221220576c8c9610cda779f616fc5416f88696aa93354210f01bdd58691658c2e687d164736f6c634300080a0033",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {},
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  },
+  "storageLayout": {
+    "storage": [
+      {
+        "astId": 1123,
+        "contract": "contracts/OwnedDistributor.sol:OwnedDistributor",
+        "label": "recipients",
+        "offset": 0,
+        "slot": "0",
+        "type": "t_mapping(t_address,t_struct(Recipient)1118_storage)"
+      },
+      {
+        "astId": 1125,
+        "contract": "contracts/OwnedDistributor.sol:OwnedDistributor",
+        "label": "totalShares",
+        "offset": 0,
+        "slot": "1",
+        "type": "t_uint256"
+      },
+      {
+        "astId": 1127,
+        "contract": "contracts/OwnedDistributor.sol:OwnedDistributor",
+        "label": "shareIndex",
+        "offset": 0,
+        "slot": "2",
+        "type": "t_uint256"
+      },
+      {
+        "astId": 1390,
+        "contract": "contracts/OwnedDistributor.sol:OwnedDistributor",
+        "label": "_notEntered",
+        "offset": 0,
+        "slot": "3",
+        "type": "t_bool"
+      },
+      {
+        "astId": 2645,
+        "contract": "contracts/OwnedDistributor.sol:OwnedDistributor",
+        "label": "admin",
+        "offset": 1,
+        "slot": "3",
+        "type": "t_address"
+      }
+    ],
+    "types": {
+      "t_address": {
+        "encoding": "inplace",
+        "label": "address",
+        "numberOfBytes": "20"
+      },
+      "t_bool": {
+        "encoding": "inplace",
+        "label": "bool",
+        "numberOfBytes": "1"
+      },
+      "t_mapping(t_address,t_struct(Recipient)1118_storage)": {
+        "encoding": "mapping",
+        "key": "t_address",
+        "label": "mapping(address => struct Distributor.Recipient)",
+        "numberOfBytes": "32",
+        "value": "t_struct(Recipient)1118_storage"
+      },
+      "t_struct(Recipient)1118_storage": {
+        "encoding": "inplace",
+        "label": "struct Distributor.Recipient",
+        "members": [
+          {
+            "astId": 1113,
+            "contract": "contracts/OwnedDistributor.sol:OwnedDistributor",
+            "label": "shares",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 1115,
+            "contract": "contracts/OwnedDistributor.sol:OwnedDistributor",
+            "label": "lastShareIndex",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 1117,
+            "contract": "contracts/OwnedDistributor.sol:OwnedDistributor",
+            "label": "credit",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_uint256"
+          }
+        ],
+        "numberOfBytes": "96"
+      },
+      "t_uint256": {
+        "encoding": "inplace",
+        "label": "uint256",
+        "numberOfBytes": "32"
+      }
+    }
+  }
+}
