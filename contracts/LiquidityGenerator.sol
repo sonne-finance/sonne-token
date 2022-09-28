@@ -1,18 +1,33 @@
 //SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.10;
 
-import "./interfaces/IERC20.sol";
-import "./interfaces/IOwnedDistributor.sol";
-import "./interfaces/IVelodromeGauge.sol";
-import "./interfaces/IVelodromePairFactory.sol";
-import "./interfaces/IVelodromeRouter.sol";
-import "./interfaces/IVelodromeVoter.sol";
-import "./libraries/SafeMath.sol";
-import "./libraries/SafeToken.sol";
+import './interfaces/IERC20.sol';
+import './interfaces/IOwnedDistributor.sol';
+import './interfaces/IVelodromeGauge.sol';
+import './interfaces/IVelodromePairFactory.sol';
+import './interfaces/IVelodromeRouter.sol';
+import './interfaces/IVelodromeVoter.sol';
+import './libraries/SafeMath.sol';
+import './libraries/SafeToken.sol';
 
 contract LiquidityGenerator {
     using SafeMath for uint256;
     using SafeToken for address;
+
+    struct ConstuctorParams {
+        address admin_;
+        address sonne_;
+        address usdc_;
+        address velo_;
+        address router0_;
+        address voter_;
+        address reservesManager_;
+        address distributor_;
+        address bonusDistributor_;
+        uint256 periodBegin_;
+        uint256 periodDuration_;
+        uint256 bonusDuration_;
+    }
 
     uint256 public constant lockDuration = 6 * 30 * 24 * 60 * 60; // 6 months
 
@@ -22,7 +37,6 @@ contract LiquidityGenerator {
     address public immutable velo;
     address public immutable router0;
     address public immutable voter;
-    address public immutable reservesManager;
     address public immutable distributor;
     address public immutable bonusDistributor;
     uint256 public immutable periodBegin;
@@ -31,6 +45,7 @@ contract LiquidityGenerator {
     uint256 public unlockTimestamp;
     bool public finalized = false;
     bool public delivered = false;
+    address public reservesManager;
 
     // Generated velodrome addresses
     address public immutable pair0;
@@ -52,48 +67,35 @@ contract LiquidityGenerator {
     event Delivered(uint256 amountPair0);
     event VeloRewardClaimed(uint256 amountVelo);
 
-    constructor(
-        address admin_,
-        address sonne_,
-        address usdc_,
-        address velo_,
-        address router0_,
-        address voter_,
-        address reservesManager_,
-        address distributor_,
-        address bonusDistributor_,
-        uint256 periodBegin_,
-        uint256 periodDuration_,
-        uint256 bonusDuration_
-    ) {
+    constructor(ConstuctorParams memory params_) {
         require(
-            periodDuration_ > 0,
-            "LiquidityGenerator: INVALID_PERIOD_DURATION"
+            params_.periodDuration_ > 0,
+            'LiquidityGenerator: INVALID_PERIOD_DURATION'
         );
         require(
-            bonusDuration_ > 0 && bonusDuration_ <= periodDuration_,
-            "LiquidityGenerator: INVALID_BONUS_DURATION"
+            params_.bonusDuration_ > 0 &&
+                params_.bonusDuration_ <= params_.periodDuration_,
+            'LiquidityGenerator: INVALID_BONUS_DURATION'
         );
-        admin = admin_;
-        sonne = sonne_;
-        usdc = usdc_;
-        velo = velo_;
-        router0 = router0_;
-        voter = voter_;
-        reservesManager = reservesManager_;
-        distributor = distributor_;
-        bonusDistributor = bonusDistributor_;
-        periodBegin = periodBegin_;
-        periodEnd = periodBegin_.add(periodDuration_);
-        bonusEnd = periodBegin_.add(bonusDuration_);
+        admin = params_.admin_;
+        sonne = params_.sonne_;
+        usdc = params_.usdc_;
+        velo = params_.velo_;
+        router0 = params_.router0_;
+        voter = params_.voter_;
+        reservesManager = params_.reservesManager_;
+        distributor = params_.distributor_;
+        bonusDistributor = params_.bonusDistributor_;
+        periodBegin = params_.periodBegin_;
+        periodEnd = params_.periodBegin_.add(params_.periodDuration_);
+        bonusEnd = params_.periodBegin_.add(params_.bonusDuration_);
 
-        address _veloPairFactory = IVelodromeRouter(router0_).factory();
-        address _pair0 = IVelodromePairFactory(_veloPairFactory).createPair(
-            sonne_,
-            usdc_,
-            false
+        address _pair0 = _createPair(
+            params_.router0_,
+            params_.sonne_,
+            params_.usdc_
         );
-        address _gauge = IVelodromeVoter(voter_).createGauge(_pair0);
+        address _gauge = _createGauge(params_.voter_, _pair0);
 
         pair0 = _pair0;
         gauge = _gauge;
@@ -139,11 +141,20 @@ contract LiquidityGenerator {
         return IOwnedDistributor(bonusDistributor).recipients(account);
     }
 
+    function setReserveManager(address reserveManager_) external {
+        require(msg.sender == admin, 'LiquidityGenerator: FORBIDDEN');
+        require(
+            reserveManager_ != address(0),
+            'LiquidityGenerator: INVALID_ADDRESS'
+        );
+        reservesManager = reserveManager_;
+    }
+
     function postponeUnlockTimestamp(uint256 newUnlockTimestamp) public {
-        require(msg.sender == admin, "LiquidityGenerator: UNAUTHORIZED");
+        require(msg.sender == admin, 'LiquidityGenerator: UNAUTHORIZED');
         require(
             newUnlockTimestamp > unlockTimestamp,
-            "LiquidityGenerator: INVALID_UNLOCK_TIMESTAMP"
+            'LiquidityGenerator: INVALID_UNLOCK_TIMESTAMP'
         );
         uint256 prevUnlockTimestamp = unlockTimestamp;
         unlockTimestamp = newUnlockTimestamp;
@@ -151,13 +162,13 @@ contract LiquidityGenerator {
     }
 
     function deliverLiquidityToReservesManager() public {
-        require(msg.sender == admin, "LiquidityGenerator: UNAUTHORIZED");
-        require(!delivered, "LiquidityGenerator: ALREADY_DELIVERED");
-        require(finalized, "LiquidityGenerator: NOT_FINALIZED");
+        require(msg.sender == admin, 'LiquidityGenerator: UNAUTHORIZED');
+        require(!delivered, 'LiquidityGenerator: ALREADY_DELIVERED');
+        require(finalized, 'LiquidityGenerator: NOT_FINALIZED');
         uint256 blockTimestamp = getBlockTimestamp();
         require(
             blockTimestamp >= unlockTimestamp,
-            "LiquidityGenerator: STILL_LOCKED"
+            'LiquidityGenerator: STILL_LOCKED'
         );
         IVelodromeGauge(gauge).withdrawAll();
         uint256 _amountPair0 = pair0.myBalance();
@@ -167,9 +178,8 @@ contract LiquidityGenerator {
     }
 
     function claimVeloRewards() public {
-        require(msg.sender == admin, "LiquidityGenerator: UNAUTHORIZED");
-        require(!delivered, "LiquidityGenerator: ALREADY_DELIVERED");
-        require(finalized, "LiquidityGenerator: ALREADY_DELIVERED");
+        require(msg.sender == admin, 'LiquidityGenerator: UNAUTHORIZED');
+        require(finalized, 'LiquidityGenerator: NOT_FINALIZED');
 
         address[] memory tokens = new address[](1);
         tokens[0] = velo;
@@ -181,9 +191,10 @@ contract LiquidityGenerator {
     }
 
     function finalize() public {
-        require(!finalized, "LiquidityGenerator: FINALIZED");
+        require(!finalized, 'LiquidityGenerator: FINALIZED');
         uint256 blockTimestamp = getBlockTimestamp();
-        require(blockTimestamp >= periodEnd, "LiquidityGenerator: TOO_SOON");
+        require(blockTimestamp >= periodEnd, 'LiquidityGenerator: TOO_SOON');
+
         uint256 _amountSonne = sonne.myBalance();
         uint256 _amountUSDC = usdc.myBalance();
 
@@ -212,9 +223,9 @@ contract LiquidityGenerator {
 
     function deposit(uint256 amountUSDC) external payable {
         uint256 blockTimestamp = getBlockTimestamp();
-        require(blockTimestamp >= periodBegin, "LiquidityGenerator: TOO_SOON");
-        require(blockTimestamp < periodEnd, "LiquidityGenerator: TOO_LATE");
-        require(amountUSDC >= 1e8, "LiquidityGenerator: INVALID_VALUE"); // minimum 100 USDC
+        require(blockTimestamp >= periodBegin, 'LiquidityGenerator: TOO_SOON');
+        require(blockTimestamp < periodEnd, 'LiquidityGenerator: TOO_LATE');
+        require(amountUSDC >= 1e7, 'LiquidityGenerator: INVALID_VALUE'); // minimum 10 USDC
 
         // Pull usdc to this contract
         usdc.safeTransferFrom(msg.sender, address(this), amountUSDC);
@@ -245,10 +256,44 @@ contract LiquidityGenerator {
     }
 
     receive() external payable {
-        revert("LiquidityGenerator: BAD_CALL");
+        revert('LiquidityGenerator: BAD_CALL');
     }
 
     function getBlockTimestamp() public view virtual returns (uint256) {
         return block.timestamp;
+    }
+
+    function _createPair(
+        address router_,
+        address sonne_,
+        address usdc_
+    ) internal returns (address) {
+        address _veloPairFactory = IVelodromeRouter(router_).factory();
+        address _pair = IVelodromePairFactory(_veloPairFactory).getPair(
+            sonne_,
+            usdc_,
+            false
+        );
+        if (_pair != address(0)) return _pair;
+
+        _pair = IVelodromePairFactory(_veloPairFactory).createPair(
+            sonne,
+            usdc,
+            false
+        );
+
+        return _pair;
+    }
+
+    function _createGauge(address voter_, address pair0_)
+        internal
+        returns (address)
+    {
+        address _gauge = IVelodromeVoter(voter_).gauges(pair0_);
+        if (_gauge != address(0)) return _gauge;
+
+        _gauge = IVelodromeVoter(voter_).createGauge(pair0_);
+
+        return _gauge;
     }
 }

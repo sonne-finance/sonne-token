@@ -9,25 +9,28 @@ const sonneAmount = ethers.utils.parseEther('2500000')
 const vestingAmount = ethers.utils.parseEther('3200000')
 const bonusVestingAmount = ethers.utils.parseEther('300000')
 const initial = 5000
+const periodBegin = 1664139600 // 2022-06-25 9:00:00 PM UTC
 const periodDuration = 3 * 24 * 60 * 60 // 3 days
+const periodEnd = periodBegin + periodDuration
 const bonusDuration = 1 * 24 * 60 * 60 // 1 day
-const vestingBeginGap = 30 * 60 // 30 minutes
-const vestingDuration = 1 * 360 * 24 * 60 * 60 // 1 year
+const vestingBegin = 1664409600 // 2022-09-29 12:00:00 AM UTC
+const vestingDuration = 1 * 365 * 24 * 60 * 60 // 1 year
 
 let sonneAddress = '0x1db2466d9f5e10d7090e7152b68d62703a2245f0'
 let usdcAddress = '0x7f5c764cbc14f9669b88837ca1490cca17c31607'
+let lgeAddress = '0x17063Ad4e83B0aBA4ca0F3fC3a9794E807A00ED7'
 
-describe.skip('Liquidity Generator', function () {
+describe('Liquidity Generator', function () {
     const deployFixture = async () => {
         // Accounts
-        const [admin, reservesManager, participant1, participant2] =
-            await ethers.getSigners()
+        const [participant1, participant2] = await ethers.getSigners()
 
-        // Times
-        const periodBegin = (await ethers.provider.getBlock('latest')).timestamp
-        const periodEnd = periodBegin + periodDuration
-        const vestingBegin = periodEnd + vestingBeginGap
-        const vestingEnd = vestingBegin + vestingDuration
+        const reservesManager = await ethers.getImpersonatedSigner(
+            '0x201ECB1C439F92aFd5df5d399e195F73b01bB0F3',
+        )
+        const admin = await ethers.getImpersonatedSigner(
+            '0xfb59ce8986943163f14c590755b29db2998f2322',
+        )
 
         // Sonne
         const sonne = await getTokenContract({
@@ -47,99 +50,67 @@ describe.skip('Liquidity Generator', function () {
             decimals: '6',
         })
 
-        // Distributor
-        const Vester = await ethers.getContractFactory('VesterSale')
-        const vester = await Vester.deploy(
-            sonne.address,
-            admin.address,
-            vestingAmount,
-            vestingBegin,
-            vestingEnd,
+        // Give participants some USDC
+        await (
+            await usdc
+                .connect(admin)
+                .transfer(
+                    participant1.address,
+                    ethers.utils.parseUnits('1500', 6),
+                )
+        ).wait(1)
+        await (
+            await usdc
+                .connect(admin)
+                .transfer(
+                    participant2.address,
+                    ethers.utils.parseUnits('5000', 6),
+                )
+        ).wait(1)
+
+        // Liquidity Generator
+        const liquidityGenerator = await ethers.getContractAt(
+            'LiquidityGenerator',
+            lgeAddress,
         )
 
-        const Distributor = await ethers.getContractFactory('OwnedDistributor')
-        const distributor = await Distributor.deploy(
-            sonne.address,
-            vester.address,
-            admin.address,
-        )
-        await (await vester.setRecipient(distributor.address)).wait(1)
-
-        // Bonus Distributor
-        const BonusVester = await ethers.getContractFactory('VesterSale')
-        const bonusVester = await BonusVester.deploy(
-            sonne.address,
-            admin.address,
-            bonusVestingAmount,
-            vestingBegin,
-            vestingEnd,
-        )
-
-        const BonusDistributor = await ethers.getContractFactory(
+        const distributor = await ethers.getContractAt(
             'OwnedDistributor',
+            await liquidityGenerator.distributor(),
         )
-        const bonusDistributor = await BonusDistributor.deploy(
-            sonne.address,
-            bonusVester.address,
-            admin.address,
+
+        const vester = await ethers.getContractAt(
+            'VesterSale',
+            await distributor.claimable(),
         )
-        await (await bonusVester.setRecipient(bonusDistributor.address)).wait(1)
+
+        const bonusDistributor = await ethers.getContractAt(
+            'OwnedDistributor',
+            await liquidityGenerator.bonusDistributor(),
+        )
+
+        const bonusVester = await ethers.getContractAt(
+            'VesterSale',
+            await bonusDistributor.claimable(),
+        )
 
         // Velodrome Contracts
         const velo = await ethers.getContractAt(
             './contracts/interfaces/IERC20.sol:IERC20',
-            '0x3c8B650257cFb5f272f799F5e2b4e65093a11a05',
+            await liquidityGenerator.velo(),
         )
         const router = await ethers.getContractAt(
             'IVelodromeRouter',
-            '0x9c12939390052919af3155f41bf4160fd3666a6f',
+            await liquidityGenerator.router0(),
         )
         const voter = await ethers.getContractAt(
             'IVelodromeVoter',
-            '0x09236cfF45047DBee6B921e00704bed6D6B8Cf7e',
+            await liquidityGenerator.voter(),
         )
         const veNFT = await ethers.getContractAt(
             'IVelodromeVotingEscrow',
             '0x9c7305eb78a432ced5c4d14cac27e8ed569a2e26',
         )
-
-        // Liquidity Generator
-        const LiquidityGenerator = await ethers.getContractFactory(
-            'LiquidityGenerator',
-        )
-        const liquidityGenerator = await LiquidityGenerator.deploy([
-            admin.address,
-            sonne.address,
-            usdc.address,
-            velo.address,
-            router.address,
-            voter.address,
-            reservesManager.address,
-            distributor.address,
-            bonusDistributor.address,
-            periodBegin,
-            periodDuration,
-            bonusDuration,
-        ])
-
-        // Add Sonne to the liquidity generator
-        await (
-            await sonne.transfer(liquidityGenerator.address, sonneAmount)
-        ).wait(1)
-
-        // Add Sonne to Vester
-        await (await sonne.transfer(vester.address, vestingAmount)).wait(1)
-
-        // Add Sonne to Bonus Vester
-        await (
-            await sonne.transfer(bonusVester.address, bonusVestingAmount)
-        ).wait(1)
-
-        // Set the liquidity generator as the distributor's admin
-        await (await distributor.setAdmin(liquidityGenerator.address)).wait(1)
-        await (
-            await bonusDistributor.setAdmin(liquidityGenerator.address)
-        ).wait(1)
 
         // Get Pair
         const pairFactory = await ethers.getContractAt(
@@ -155,25 +126,6 @@ describe.skip('Liquidity Generator', function () {
             './contracts/interfaces/IERC20.sol:IERC20',
             pairAddress,
         )
-
-        // Go to 5 hours later
-        await ethers.provider.send('evm_increaseTime', [5 * 60 * 60])
-        await ethers.provider.send('evm_mine', [])
-
-        // Whitelist tokens in behalf of the governor
-        const gaugeGovernor = await ethers.getImpersonatedSigner(
-            '0xb074ec6c37659525eef2fb44478077901f878012',
-        )
-        try {
-            await (
-                await voter.connect(gaugeGovernor).whitelist(sonne.address)
-            ).wait(1)
-        } catch {}
-        try {
-            await (
-                await voter.connect(gaugeGovernor).whitelist(usdc.address)
-            ).wait(1)
-        } catch {}
 
         return {
             admin,
@@ -211,15 +163,10 @@ describe.skip('Liquidity Generator', function () {
 
     it('Should finalize and stake the liquidity', async function () {
         const deployment = await loadFixture(deployFixture)
-        const { liquidityGenerator, pair, participant1, participant2 } =
-            deployment
-
-        // Participates
-        await depositParticipant(participant1, deployment)
-        await depositParticipant(participant2, deployment)
+        const { liquidityGenerator, pair } = deployment
 
         // Go to the end of the event and finalize
-        await ethers.provider.send('evm_increaseTime', [3 * 24 * 60 * 60]) // increase time by 3 days
+        await ethers.provider.send('evm_setNextBlockTimestamp', [periodEnd])
         await ethers.provider.send('evm_mine', []) // mine the next block
 
         await (await liquidityGenerator.finalize()).wait(1)
@@ -230,6 +177,10 @@ describe.skip('Liquidity Generator', function () {
         )
 
         const gauge = await getGauge(deployment)
+        expect(await pair.balanceOf(gauge.address)).to.gt(
+            0,
+            'gauge LP balance is greater than 0 after finalize',
+        )
         expect(await gauge.balanceOf(liquidityGenerator.address)).to.gt(
             0,
             'generator gauge balance is greater than 0 after finalize',
@@ -238,20 +189,10 @@ describe.skip('Liquidity Generator', function () {
 
     it('Should withdraw liquidity and send to reserves manager', async function () {
         const deployment = await loadFixture(deployFixture)
-        const {
-            reservesManager,
-            liquidityGenerator,
-            pair,
-            participant1,
-            participant2,
-        } = deployment
-
-        // Participates
-        await depositParticipant(participant1, deployment)
-        await depositParticipant(participant2, deployment)
+        const { admin, reservesManager, liquidityGenerator, pair } = deployment
 
         // Go to the end of the event and finalize
-        await ethers.provider.send('evm_increaseTime', [3 * 24 * 60 * 60]) // increase time by 3 days
+        await ethers.provider.send('evm_setNextBlockTimestamp', [periodEnd])
         await ethers.provider.send('evm_mine', []) // mine the next block
         await (await liquidityGenerator.finalize()).wait(1)
 
@@ -259,7 +200,9 @@ describe.skip('Liquidity Generator', function () {
         await ethers.provider.send('evm_increaseTime', [6 * 30 * 24 * 60 * 60]) // increase time by 6 monts
         await ethers.provider.send('evm_mine', []) // mine the next block
         await (
-            await liquidityGenerator.deliverLiquidityToReservesManager()
+            await liquidityGenerator
+                .connect(admin)
+                .deliverLiquidityToReservesManager()
         ).wait(1)
 
         expect(await pair.balanceOf(liquidityGenerator.address)).to.equals(
@@ -281,22 +224,17 @@ describe.skip('Liquidity Generator', function () {
     it('Should claim velo rewards after vote and bribe', async function () {
         const deployment = await loadFixture(deployFixture)
         const {
+            admin,
             reservesManager,
             velo,
             voter,
             veNFT,
             liquidityGenerator,
             pair,
-            participant1,
-            participant2,
         } = deployment
 
-        // Participates
-        await depositParticipant(participant1, deployment)
-        await depositParticipant(participant2, deployment)
-
         // Go to the end of the event and finalize
-        await ethers.provider.send('evm_increaseTime', [3 * 24 * 60 * 60]) // increase time by 3 days
+        await ethers.provider.send('evm_setNextBlockTimestamp', [periodEnd])
         await ethers.provider.send('evm_mine', []) // mine the next block
         await (await liquidityGenerator.finalize()).wait(1)
 
@@ -332,7 +270,9 @@ describe.skip('Liquidity Generator', function () {
         const gauge = await getGauge(deployment)
         await (await voter.distribute(gauge.address)).wait(1)
 
-        await (await liquidityGenerator.claimVeloRewards()).wait(1)
+        await (
+            await liquidityGenerator.connect(admin).claimVeloRewards()
+        ).wait(1)
         // check velo balance after velo claim
         expect(await velo.balanceOf(reservesManager.address)).to.gt(
             0,
@@ -363,13 +303,12 @@ describe.skip('Liquidity Generator', function () {
         await depositParticipant(participant2, deployment, part2Amount)
 
         // Go to the end of the event and finalize
-        await ethers.provider.send('evm_increaseTime', [3 * 24 * 60 * 60]) // increase time by 3 days
+        await ethers.provider.send('evm_setNextBlockTimestamp', [periodEnd])
         await ethers.provider.send('evm_mine', []) // mine the next block
         await (await liquidityGenerator.finalize()).wait(1)
 
         // Go to claim time
-        const time = (await ethers.provider.getBlock('latest')).timestamp
-        await ethers.provider.send('evm_increaseTime', [vestingBegin - time]) // go to vesting begin
+        await ethers.provider.send('evm_setNextBlockTimestamp', [vestingBegin])
         await ethers.provider.send('evm_mine', []) // mine the next block
 
         // Claim tokens for Participant 1 on vester
