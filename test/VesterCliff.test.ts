@@ -98,7 +98,7 @@ const deployFixture = async () => {
     return { admin, sonne, vesterCliff, distributor, rec1, rec2 }
 }
 
-describe.only('Vester Cliff', function () {
+describe('Vester Cliff', function () {
     it('Should revert on bad contract creation', async function () {
         const [deployer] = await ethers.getSigners()
         const admin = await ethers.getImpersonatedSigner(

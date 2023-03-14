@@ -23,9 +23,9 @@ const recipients: any = {
 }
 
 const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
-    //if (hre.network.name !== 'localhost') {
-    //    return
-    // }
+    if (hre.network.name !== 'localhost') {
+        return
+    }
     const {
         deployments: { deploy, get, getOrNull },
         network,
