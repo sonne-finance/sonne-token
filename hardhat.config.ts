@@ -1,9 +1,10 @@
+import * as dotenv from 'dotenv'
+dotenv.config()
+
 import 'hardhat-deploy'
 import 'solidity-coverage'
 import '@nomiclabs/hardhat-waffle'
 import { HardhatUserConfig } from 'hardhat/config'
-
-import accounts, { apiKeys } from './_accounts'
 
 const config: HardhatUserConfig = {
     networks: {
@@ -25,13 +26,17 @@ const config: HardhatUserConfig = {
         },
         optimism: {
             url: 'https://rpc.ankr.com/optimism',
-            accounts,
+            accounts: [process.env.DEPLOYER_OPTIMISM!],
             verify: {
                 etherscan: {
                     apiUrl: 'https://api-optimistic.etherscan.io',
-                    apiKey: apiKeys.optimistic,
+                    apiKey: process.env.ETHERSCAN_OPTIMISM,
                 },
             },
+        },
+        kava: {
+            url: 'https://evm.kava.io',
+            accounts: [process.env.DEPLOYER_KAVA!],
         },
     },
     solidity: {
